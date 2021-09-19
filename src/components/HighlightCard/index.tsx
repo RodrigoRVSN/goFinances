@@ -7,7 +7,7 @@ import {
   Footer,
   Amount,
   LastTransaction,
-} from "./style";
+} from "./styles";
 
 interface Props {
   type: "up" | "down" | "total";
