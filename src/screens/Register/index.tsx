@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Keyboard, Modal, TouchableWithoutFeedback, Alert } from "react-native";
 import { Button } from "../../components/Form/Button";
 import { InputForm } from "../../components/Form/InputForm";
@@ -9,6 +9,7 @@ import CategorySelect from "../CategorySelect";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import {
   Container,
@@ -31,6 +32,7 @@ const schema = Yup.object().shape({
     .positive("O valor não pode ser negativo")
     .required("O valor é obrigatório"),
 });
+const dataKey = "@gofinances:transactions";
 
 export default function Register() {
   const [category, setCategory] = useState({
@@ -60,19 +62,37 @@ export default function Register() {
     setCategoryModalOpen(true);
   }
 
-  function handleRegister(form: FormData) {
+  async function handleRegister(form: FormData) {
     if (!transactionType) return Alert.alert("Selecione um tipo de transação.");
     if (category.key === "category")
       return Alert.alert("Selecione a categoria.");
 
-    const data = {
+    const newTransaction = {
       name: form.name,
       amount: form.amount,
       transactionType,
       category: category.key,
     };
-    console.log(data);
+    try {
+      const data = await AsyncStorage.getItem(dataKey);
+      const currentData = data ? JSON.parse(data) : [];
+      const dataFormatted = [...currentData, newTransaction];
+
+      await AsyncStorage.setItem(dataKey, JSON.stringify(dataFormatted));
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Não foi possível salvar");
+    }
   }
+
+  useEffect(() => {
+    async function loadData() {
+      const data = await AsyncStorage.getItem(dataKey);
+      console.log(JSON.parse(data!));
+    }
+    loadData();
+  }, []);
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <Container>
