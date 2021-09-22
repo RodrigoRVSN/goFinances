@@ -1,12 +1,23 @@
-import React, { useEffect, useState , useCallback} from "react";
-import { Container, Header, Title, Content ,ChartContent} from "./styles";
+import React, { useEffect, useState, useCallback } from "react";
+import {
+  Container,
+  Header,
+  Title,
+  Content,
+  ChartContent,
+  MonthSelect,
+  MonthSelectButton,
+  MonthSelectIcon,
+  Month,
+} from "./styles";
 import { HistoryCard } from "../../components/HistoryCard";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { categories } from "../../utils/categories";
-import {VictoryPie} from 'victory-native'
+import { VictoryPie } from "victory-native";
 import { useFocusEffect } from "@react-navigation/core";
 import { RFValue } from "react-native-responsive-fontsize";
 import { useTheme } from "styled-components";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 interface TransactionData {
   type: "positive" | "negative";
@@ -34,20 +45,25 @@ export default function Resume() {
     const dataKey = "@gofinances:transactions";
     const response = await AsyncStorage.getItem(dataKey);
     const responseFormatted = response ? JSON.parse(response) : [];
-    
+
     const expensives = responseFormatted.filter(
       (expensive: TransactionData) => expensive.type === "negative"
     );
 
-    const expensivesTotal = expensives.reduce((accumullator: number, expensive: TransactionData)=>{return accumullator + expensive.amount;}, 0)
+    const expensivesTotal = expensives.reduce(
+      (accumullator: number, expensive: TransactionData) => {
+        return accumullator + expensive.amount;
+      },
+      0
+    );
 
     const totalByCategory: CategoryData[] = [];
 
-    categories.forEach(category => {
+    categories.forEach((category) => {
       let categorySum = 0;
 
       expensives.forEach((expensive: TransactionData) => {
-        if(expensive.category === category.key){
+        if (expensive.category === category.key) {
           categorySum += Number(expensive.amount);
         }
       });
@@ -58,7 +74,9 @@ export default function Resume() {
           currency: "BRL",
         });
 
-        const percent = `${(categorySum / expensivesTotal * 100).toFixed(0)}%`;
+        const percent = `${((categorySum / expensivesTotal) * 100).toFixed(
+          0
+        )}%`;
 
         totalByCategory.push({
           key: category.key,
@@ -66,17 +84,19 @@ export default function Resume() {
           total: categorySum,
           color: category.color,
           totalFormatted,
-          percent
+          percent,
         });
       }
     });
-    
+
     setTotalByCategories(totalByCategory);
   }
 
-  useFocusEffect(useCallback(() => {
-    loadData();
-  },[]));
+  useFocusEffect(
+    useCallback(() => {
+      loadData();
+    }, [])
+  );
 
   return (
     <>
@@ -84,18 +104,39 @@ export default function Resume() {
         <Header>
           <Title>Resumo por categoria</Title>
         </Header>
-        <Content>
-          <ChartContent>
+        <Content
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            padding: 24,
+            paddingBottom: useBottomTabBarHeight(),
+          }}
+        >
+          <MonthSelect>
+            <MonthSelectButton>
+              <MonthSelectIcon name="chevron-left" />
+            </MonthSelectButton>
+            
+            <Month>Maio</Month>
 
-          <VictoryPie 
-          data={totalByCategories} 
-          colorScale={totalByCategories.map(category => category.color)} 
-          style={{
-            labels: {fontSize: RFValue(18), fontWeight: 'bold', fill: theme.colors.shape}
-          }} 
-          labelRadius={80}
-          x="percent" 
-          y="total"/>
+            <MonthSelectButton>
+              <MonthSelectIcon name="chevron-right" />
+            </MonthSelectButton>
+          </MonthSelect>
+          <ChartContent>
+            <VictoryPie
+              data={totalByCategories}
+              colorScale={totalByCategories.map((category) => category.color)}
+              style={{
+                labels: {
+                  fontSize: RFValue(18),
+                  fontWeight: "bold",
+                  fill: theme.colors.shape,
+                },
+              }}
+              labelRadius={80}
+              x="percent"
+              y="total"
+            />
           </ChartContent>
           {totalByCategories.map((item) => (
             <HistoryCard
