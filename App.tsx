@@ -13,6 +13,7 @@ import AppLoading from "expo-app-loading";
 import { AppRoutes } from "./src/routes/app.routes";
 import { StatusBar } from "react-native";
 import SignIn from "./src/screens/SignIn";
+import { AuthProvider } from "./src/hooks/AuthContext";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -34,7 +35,10 @@ export default function App() {
             backgroundColor="transparent"
             translucent
           />
-          <SignIn />
+
+          <AuthProvider>
+            <SignIn />
+          </AuthProvider>
         </NavigationContainer>
       </ThemeProvider>
     </>
