@@ -45,8 +45,8 @@ export default function Resume() {
   const [totalByCategories, setTotalByCategories] = useState<CategoryData[]>(
     []
   );
-  const theme = useTheme();
   const [isLoading, setIsLoading] = useState(true);
+  const theme = useTheme();
 
   function handleDateChange(action: "next" | "prev") {
     if (action === "next") {
