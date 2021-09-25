@@ -1,5 +1,5 @@
-import 'react-native-gesture-handler';
-import 'intl';
+import 'react-native-gesture-handler'; // Adicionar elementos gesture handler
+import 'intl'; // Converter data horario br
 import 'intl/locale-data/jsonp/pt-BR';
 import { registerRootComponent } from 'expo';
 

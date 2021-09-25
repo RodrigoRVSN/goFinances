@@ -16,6 +16,8 @@ import SignIn from "./src/screens/SignIn";
 import { AuthProvider } from "./src/hooks/AuthContext";
 
 export default function App() {
+  
+  // Mantém o aplicativo carregando enquanto as fontes são carregadas
   const [fontsLoaded] = useFonts({
     Poppins_400Regular,
     Poppins_500Medium,
