@@ -23,6 +23,7 @@ import { addMonths } from "date-fns/esm";
 import { format, subMonths } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { ActivityIndicator } from "react-native";
+import { useAuth } from "../../hooks/AuthContext";
 
 interface TransactionData {
   type: "positive" | "negative";
@@ -47,6 +48,7 @@ export default function Resume() {
   );
   const [isLoading, setIsLoading] = useState(true);
   const theme = useTheme();
+  const { user } = useAuth();
 
   function handleDateChange(action: "next" | "prev") {
     if (action === "next") {
@@ -58,7 +60,7 @@ export default function Resume() {
 
   async function loadData() {
     setIsLoading(true);
-    const dataKey = "@gofinances:transactions";
+    const dataKey = `@gofinances:transactions_user:${user.id}`;
     const response = await AsyncStorage.getItem(dataKey);
     const responseFormatted = response ? JSON.parse(response) : [];
 

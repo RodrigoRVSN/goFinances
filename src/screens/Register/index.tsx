@@ -26,6 +26,7 @@ import {
 import { useNavigation } from "@react-navigation/core";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { RootStackParamList } from "../../routes/app.routes";
+import { useAuth } from "../../hooks/AuthContext";
 
 interface FormData {
   name: string;
@@ -42,6 +43,7 @@ const schema = Yup.object().shape({
 });
 
 export default function Register() {
+  const { user } = useAuth();
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
   const [transactionType, setTransactionType] = useState("");
   const [category, setCategory] = useState({
@@ -72,7 +74,7 @@ export default function Register() {
   }
 
   async function handleRegister(form: FormData) {
-    const dataKey = "@gofinances:transactions";
+    const dataKey = `@gofinances:transactions_user:${user.id}`;
     if (!transactionType) return Alert.alert("Selecione um tipo de transação.");
     if (category.key === "category")
       return Alert.alert("Selecione a categoria.");
