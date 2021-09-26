@@ -63,13 +63,19 @@ function AuthProvider({ children }: AuthProviderProps) {
           `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${params.access_token}`
         );
         const userInfo = await response.json();
-        setUser({
+
+        const userLogged = {
           id: userInfo.id,
-          name: userInfo.name,
           email: userInfo.email,
+          name: userInfo.given_name,
           photo: userInfo.picture,
-        });
-        await AsyncStorage.setItem(USER_STORAGE_KEY, JSON.stringify(user));
+        };
+
+        setUser(userLogged);
+        await AsyncStorage.setItem(
+          USER_STORAGE_KEY,
+          JSON.stringify(userLogged)
+        );
       }
     } catch (error) {
       throw new Error(error);
@@ -116,7 +122,6 @@ function AuthProvider({ children }: AuthProviderProps) {
       const userStoraged = await AsyncStorage.getItem(USER_STORAGE_KEY);
       if (userStoraged) {
         const userLogged = JSON.parse(userStoraged);
-        console.log(userLogged);
         setUser(userLogged);
       }
       setUserStorageLoading(false);

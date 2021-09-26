@@ -20,7 +20,7 @@ export function AppRoutes() {
   const theme = useTheme();
   return (
     <Navigator
-      initialRouteName="Resumo"
+      initialRouteName="Listagem"
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: theme.colors.secondary,
