@@ -1,7 +1,7 @@
 # 💻 Project
 
 ## goFinances app - With this app, you can manage your finances, like entries and expensives.
-### This project was made in Ignite to train Expo Bare Workflow with Styled Components, in React Native. 
+### This project was made in Ignite to train Expo Bare Workflow with Styled Components, in React Native. (https://expo.dev/@rodrigorvsn/gofinances)
 
 ---
 

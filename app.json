@@ -1,12 +1,28 @@
 {
+  "name": "gofinances",
+  "displayName": "gofinances",
   "expo": {
     "name": "gofinances",
     "slug": "gofinances",
     "scheme": "gofinances",
     "version": "1.0.0",
+    "icon": "./assets/logo.png",
     "assetBundlePatterns": [
       "**/*"
-    ]
-  },
-  "name": "gofinances"
+    ],
+    "android": {
+      "package": "com.gofinances"
+    },
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#5636D3"
+    },
+    "ios": {
+      "bundleIdentifier": "com.gofinances",
+      "buildNumber": "1.0.0"
+    },
+    "description": "",
+    "githubUrl": "https://github.com/RodrigoRVSN/goFinances"
+  }
 }
